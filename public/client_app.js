@@ -13,7 +13,7 @@ if (hostname.includes('mybluemix')){
 }
 else{
   socket = io('ws://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally without HTTPS. To run with localtunnel.me use: http://chatbot-botmasterai.localtunnel.me/
-  //var socket = io('wss://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally with HTTPS, To run with localtunnel.me use: https://chatbot-botmasterai.localtunnel.me/
+  // socket = io('wss://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally with HTTPS, To run with localtunnel.me use: https://chatbot-botmasterai.localtunnel.me/
 }
 
 // just get the html elements we will be needing by ID
