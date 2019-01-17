@@ -3,7 +3,18 @@
 // this only works because the socket.io library assumes with this syntax that the socket.io server
 // lives at the same address as the server that served this page (this should mostly be your case)
 //var socket = io('?botmasterUserId=wantedUserId');
-var socket = io('ws://0.0.0.0:3000?botmasterUserId=USER_ID'); // TODO: change "USER_ID" to user id after authentication
+
+
+var hostname = window.location.hostname;
+var socket;
+var USER_ID = 'user123'; // TODO: change "USER_ID" to user id after authentication
+if (hostname.includes('mybluemix')){
+  socket = io('wss://chatbot-botmasterai.mybluemix.net?botmasterUserId=' + USER_ID); // use it for IBM Cloud
+}
+else{
+  socket = io('ws://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally without HTTPS. To run with localtunnel.me use: http://chatbot-botmasterai.localtunnel.me/
+  //var socket = io('wss://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally with HTTPS, To run with localtunnel.me use: https://chatbot-botmasterai.localtunnel.me/
+}
 
 // just get the html elements we will be needing by ID
 var form = document.getElementById('form');
