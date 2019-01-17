@@ -44,13 +44,17 @@ TODO: Add HTTPS local server to be able to use ```https://chatbot-botmasterai.lo
 
 # How to run chatbot using IBM Cloud
 
-1. Create an IBM Cloud Node.js app and push the code: ```bluemix app push APP_NAME```. Change the name of your app (APP_NAME), for example:
+1. Create an IBM Cloud Node.js app and push the code:
 
-    ```bluemix app push chatbot-botmasterai```
+    `bluemix app push APP_NAME`
+
+   For example, if the APP_NAME is `chatbot-botmasterai`, run:
+
+    `bluemix app push chatbot-botmasterai`
 
 2. Open a browser and start chatting at:
 
-    ```https://chatbot-botmasterai.mybluemix.net/```
+    `https://chatbot-botmasterai.mybluemix.net/`
 
 
 
@@ -67,3 +71,7 @@ Follow these [instructions]( https://github.com/botmasterai/botmaster-messenger#
 4. Configure the Webhook for your app, following all these [instructions](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup). If you set up the server in IBM Cloud, as 'Callback URL' use the following ```https://MY_APP_NAME.mybluemix.net/messenger/FACEBOOK_WEBHOOK_ENDPOINT/``` (as an example: ```https://chatbot-botmasterai.mybluemix.net/messenger/webhook1234/```), and as Verify Token the value you saved as FACEBOOK_VERIFY_TOKEN in the .env file.
 
 5. Subscribe your app to a Facebook Page and start chatting with the chatbot by sending a message to the Facebook Page connected.
+
+# How to run chatbot using Slack
+
+TODO
