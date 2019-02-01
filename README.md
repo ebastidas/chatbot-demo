@@ -1,6 +1,6 @@
 # chatbot-demo
 
-This repo shows a demo of a simple Shop's Customer Service chatbot. It's powered by IBM Watson Conversation/Assistant service and based on the web client from [Botmaster](http://botmasterai.com).
+This repo shows a demo of a simple Shop's Customer Service chatbot. It's powered by IBM Watson Conversation/Assistant service and based on the web client from [Botmaster](http://botmasterai.com). Check the demo here: https://chatbot-botmasterai.mybluemix.net/
 
  To run this application, first create a Watson Assistant service in IBM Cloud and add the sample Customer Care Skill to your instance. Then change the environment variables in the file ".env" to your Watson Assistant Password (WATSON_ASSISTANT_PASSWORD) and the Watson Assistant Workspace/Skill ID (WATSON_ASSISTANT_WORKSPACE_ID). Check this [link](https://cloud.ibm.com/docs/services/watson/getting-started-credentials.html#getting-credentials-manually) to get these credentials.
 
@@ -21,6 +21,19 @@ Here a sample of a chat you can have with the bot:
 ![chat-sample](https://raw.githubusercontent.com/ebastidas/chatbot-demo/master/docs/chat-sample.png)
 
 
+## Debug
+
+To debug start the app with this command:  `DEBUG=botmaster:* node server.js`
+
+## Enable Translatation
+
+To enable translation change the variables in the ".env" file as follows:
+
+`WATSON_LANGUAGE_TRANSLATOR_ENABLED = true`
+`WATSON_LANGUAGE_TRANSLATOR_TARGET_LANGUAGE = es`
+
+The value `WATSON_LANGUAGE_TRANSLATOR_TARGET_LANGUAGE` is to be set to the target language: es (Spanish), de (German), ko (Korean), etc. The main language is English (the defined language of Watson Assistant). There's a 2-way-translation: first the incoming messages (from user to bot) are translated from target language to English (this translated message is being sent Watson Assistant), then second the response from Watson Assistant (in English) is translated to the target language and sent to the user.
+
 
 # How to run chatbot locally and expose it to a public URL using LocalTunnel.me
 
@@ -28,15 +41,13 @@ Here a sample of a chat you can have with the bot:
 
     `node server.js`
 
-2. While the server runs, open another terminal and run the command:
+2. If not installed, then install [LocalTunnel](https://localtunnel.github.io/www/). While the botmaster server runs, open another terminal and run the command:
 
     `npm run tunnel`
 
 3. Open a browser and start chatting at:
 
     `http://chatbot-botmasterai.localtunnel.me/`
-
-
 
 TODO: Add HTTPS local server to be able to use ```https://chatbot-botmasterai.localtunnel.me/```, and being able to connect it to Facebook Messenger using this URL as 'Callback URL'.
 

@@ -1,18 +1,25 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Botmaster bot</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div class="chat">
-      <ul id="messages"></ul>
-      <form id="form" action="">
-        <input type="text" id="text-input" autocomplete="off" /><button>Send</button>
-      </form>
-    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="client_app.js"></script>
-  </body>
+<head>
+  <title>Botmaster bot</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+  <div class="chat">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input type="text" id="text-input" autocomplete="off" /><button>Send</button>
+      <select>
+        <option value="english">English</option>
+        <option value="spanish" disabled>Spanish</option>
+      </select>
+    </form>
+  </div>
+  <script src="/lib/socket.io/socket.io.js"></script>
+  <script src="/lib/uuid/uuid.v4.js"></script>
+  <script src="client_app.js"></script>
+</body>
+
 </html>

@@ -7,8 +7,10 @@ const dotenv = require('dotenv').config();
 
 
 /////////////////////////////////////////////////////
-/// Express server for frontend app
+/// Express server for Frontend app - START
 /////////////////////////////////////////////////////
+
+// TODO: Refractor the frontend app in a separate file/folder
 
 const express = require('express');
 
@@ -20,12 +22,16 @@ const app = express();
 app.use(express.static(__dirname + '/public'));
 
 const server = app.listen(port, host, () => {
-    console.log('Server listening at http://%s:%d', host, port);
+  console.log('Server listening at http://%s:%d', host, port);
 });
+
+/////////////////////////////////////////////////////
+/// Express server for Frontend app - END
+/////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////
-/// Botmaster
+/// Botmaster Backend
 /////////////////////////////////////////////////////
 
 const Botmaster = require('botmaster');
@@ -35,8 +41,15 @@ const botmaster = new Botmaster({
   server
 });
 
+
 /////////////////////////////////////////////////////
-/// SocketIo Bot
+/////////////////////////////////////////////////////
+/// Bot platforms - START
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+/// Bot platform: SocketIo
 /////////////////////////////////////////////////////
 
 // Using this socket.io bot class for the sake of the example
@@ -44,14 +57,14 @@ const SocketioBot = require('botmaster-socket.io');
 
 // Adding a SocketIo to botmaster
 botmaster.addBot(new SocketioBot({
-  id: 'SOCKETIO_BOT_ID',
+  id: 'SOCKETIO_BOT_ID', //TOTO: change id
   // server: botmaster.server, // this is required for socket.io. You can set it to another node server object if you wish to. But in this example, we will use the one created by botmaster under the hood
   server: server
 }));
 
 
 /////////////////////////////////////////////////////
-/// Facebook Bot
+/// Bot platform: Facebook Messenger
 /////////////////////////////////////////////////////
 
 const MessengerBot = require('botmaster-messenger');
@@ -70,7 +83,41 @@ const messengerBot = new MessengerBot(messengerSettings);
 botmaster.addBot(messengerBot);
 
 /////////////////////////////////////////////////////
-/// IBM Watson Middleware
+/////////////////////////////////////////////////////
+/// Bot platforms - END
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/// Bot middleware - START
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+const incomingMiddleware = require('./middleware/incoming');
+const outgoingMiddleware = require('./middleware/outgoing');
+const wrappedMiddleware = require('./middleware/wrapped');
+
+
+/////////////////////////////////////////////////////
+/// Bot middleware incoming: DB - store all incoming messages (from user to bot)
+/////////////////////////////////////////////////////
+
+// TODO
+// botmaster.use(incomingMiddleware.db.storeMessage);
+
+/////////////////////////////////////////////////////
+/// Bot middleware incoming:  translate incoming message
+/////////////////////////////////////////////////////
+if (process.env.WATSON_LANGUAGE_TRANSLATOR_ENABLED == 'true') {
+  botmaster.use(incomingMiddleware.translate.translateMessage);
+}
+
+
+/////////////////////////////////////////////////////
+/// Bot middleware incoming: IBM Watson Conversation Middleware and SessionWare
 /////////////////////////////////////////////////////
 
 // might want to use this in conjunction with your own store in production
@@ -93,26 +140,43 @@ const watsonConversationWareOptions = {
 const watsonConversationWare = WatsonConversationWare(watsonConversationWareOptions);
 botmaster.use(watsonConversationWare);
 
-botmaster.use({
-  type: 'incoming',
-  name: 'watson-assistant-middleware',
-  // includeEcho: true (defaults to false), opt-in to get echo updates
-  // includeDelivery: true (defaults to false), opt-in to get delivery updates
-  // includeRead: true (defaults to false), opt-in to get user read updates
-  controller: (bot, update) => {
-    //console.log(update);
-    //console.log(JSON.stringify(update.watsonUpdate, null, 4));
-    //console.log(JSON.stringify(update.session.watsonContext, null, 4));
-    //console.log(JSON.stringify(update.watsonConversation, null, 4));
-
-    // watsonUpdate.output.text is an array as watson can reply with a few messages one after another
-    return bot.sendTextCascadeTo(update.watsonUpdate.output.text, update.sender.id);
-  }
-})
-
 // This will make our context persist throughout different messages from the same user
 const sessionWare = new SessionWare();
 botmaster.useWrapped(sessionWare.incoming, sessionWare.outgoing);
+
+
+/////////////////////////////////////////////////////
+/// Bot middleware incoming: Reply user (watsonUpdate)
+/////////////////////////////////////////////////////
+botmaster.use(incomingMiddleware.reply.replyToUser);
+
+/////////////////////////////////////////////////////
+/// Bot middleware outgoing:  translate outgoing message
+/////////////////////////////////////////////////////
+if (process.env.WATSON_LANGUAGE_TRANSLATOR_ENABLED == 'true') {
+  botmaster.use(outgoingMiddleware.translate.translateMessage);
+}
+
+
+/////////////////////////////////////////////////////
+/// Bot middleware outgoing:  DB - store all outgoing messages (from bot to user)
+/////////////////////////////////////////////////////
+
+// TODO
+
+
+/////////////////////////////////////////////////////
+/// Bot middleware outgoing:  show is typing meesage
+/////////////////////////////////////////////////////
+
+// botmaster.use(outgoingMiddleware.botIsTyping.sendTypingMessage); // Error: Bots of type socket.io can't send messages with typing_on sender action at SocketioBot.sendIsTypingMessageTo
+
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/// Bot middleware - END
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////

@@ -6,8 +6,9 @@
 
 
 var hostname = window.location.hostname;
+console.log(hostname);
 var socket;
-var USER_ID = 'user123'; // TODO: change "USER_ID" to user id after authentication
+var USER_ID = uuidv4();
 if (hostname.includes('mybluemix')){
   socket = io('wss://chatbot-botmasterai.mybluemix.net?botmasterUserId=' + USER_ID); // use it for IBM Cloud
 }
@@ -48,4 +49,12 @@ socket.on('message', function(botmasterMessage){
 
   messages.insertAdjacentHTML('beforeend',
     `<li class="botmaster-message">bot:&nbsp;${textMessage}</li>`);
+
+  if(botmasterMessage.translatation.enabled == 'true'){
+    console.log('textIncomingBeforeTranslation: ' + botmasterMessage.translatation.textIncomingBeforeTranslation);
+    console.log('textIncomingAfterTranslation: ' + botmasterMessage.translatation.textIncomingAfterTranslation);
+    console.log('textOutgoingBeforeTranslation: ' + botmasterMessage.translatation.textOutgoingBeforeTranslation);
+    console.log('textOutgoingAfterTranslation: ' + botmasterMessage.translatation.textOutgoingAfterTranslation);
+    console.log('---------------------------');
+  }
 });
