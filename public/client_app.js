@@ -5,12 +5,11 @@
 //var socket = io('?botmasterUserId=wantedUserId');
 
 
-var hostname = window.location.hostname;
-console.log(hostname);
 var socket;
+var hostname = window.location.hostname;
 var USER_ID = uuidv4();
 if (hostname.includes('mybluemix')){
-  socket = io('wss://chatbot-botmasterai.mybluemix.net?botmasterUserId=' + USER_ID); // use it for IBM Cloud
+  socket = io('wss://'+ hostname +'?botmasterUserId=' + USER_ID); // use it for IBM Cloud
 }
 else{
   socket = io('ws://0.0.0.0:3000?botmasterUserId=' + USER_ID); // use it when running locally without HTTPS. To run with localtunnel.me use: http://chatbot-botmasterai.localtunnel.me/
